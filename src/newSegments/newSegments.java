@@ -1,12 +1,14 @@
 package newSegments;
-import DataFrames.*;
+import DataFrames.cnvData;
+import DataFrames.newSegmentFrame;
 import crunchData.Crunch;
-
 
 import java.io.FileInputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 public class newSegments extends Crunch {
 
@@ -71,7 +73,6 @@ public class newSegments extends Crunch {
         // Sorting data
         readDepth.sort(new cnvData.sortData());
         SVdetect.sort(new cnvData.sortData());
-
 
         crunch(readDepth, SVdetect, newSegments, newSegmentsXY);
         normalize(newSegments);

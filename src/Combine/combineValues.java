@@ -2,13 +2,13 @@ package Combine;
 
 import DataFrames.cnvFrame;
 import DataFrames.newSegmentFrame;
+import compressData.compressData;
 
-import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
 
-public class combineValues {
+public class combineValues extends compressData{
 
     private Map<Double, Integer> frequency = new HashMap<>();
     private List<cnvFrame> cnvCombined = new ArrayList<>();
@@ -155,22 +155,7 @@ public class combineValues {
 
         }
 
-        Formatter out = null;
-        try {
-            out = new Formatter("../MetaCNV/Output Files/test.txt");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        for (cnvFrame newSeg : cnvCombined) {
-            assert out != null;
-            out.format("%s\t%s\t%s\t%s\t%s\t%s\t%s\n", newSeg.getChr(), newSeg.getStart(), newSeg.getEnd(),
-                    newSeg.getCombinedValue(), newSeg.getReadDepthValue(),
-                    newSeg.getSVdetectValue(), newSeg.getComment());
-        }
-
-        assert out != null;
-        out.close();
+        compress(cnvCombined);
 
     }
 

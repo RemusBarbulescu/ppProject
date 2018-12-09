@@ -26,20 +26,6 @@ public class main {
         ns.getInputValues(readDepthInput, SVdetectInput);
         System.out.println("Finnish");
 
-//        Formatter out = null;
-//        try {
-//            out = new Formatter("../MetaCNV/Output Files/test.txt");
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//
-//        for (newSegmentFrame newSeg : Buffer) {
-//            out.format("%s\t%s\t%s\t%s\t%s\n", newSeg.getChr(), newSeg.getStart(),
-//                    newSeg.getEnd(), newSeg.getReadDepthValue(),
-//                    newSeg.getSVdetectValue());
-//        }
-//
-//        out.close();
     }
 
 }

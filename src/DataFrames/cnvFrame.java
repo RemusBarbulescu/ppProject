@@ -27,6 +27,8 @@ public class cnvFrame {
 
     public void setComment(String comment) { this.comment = comment; }
 
+    public void setEnd (int end) { this.end = end; }
+
     public String getChr() { return this.chr; }
 
     public int getStart() { return this.start; }
