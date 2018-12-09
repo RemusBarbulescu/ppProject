@@ -2,11 +2,11 @@ package crunchData;
 
 import DataFrames.cnvData;
 import DataFrames.newSegmentFrame;
-import Normalize.normalizeReadDepth;
+import Normalize.normalizeValues;
 
 import java.util.*;
 
-public class Crunch extends normalizeReadDepth {
+public class Crunch extends normalizeValues {
 
     private List<newSegmentFrame> Buffer = new ArrayList<>();
     private List<newSegmentFrame> BufferXY = new ArrayList<>();
