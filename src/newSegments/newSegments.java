@@ -18,12 +18,11 @@ public class newSegments extends Crunch {
     private List<cnvData> SVdetect = new ArrayList<>();
 
 
-    public void getInputValues(FileInputStream readDepthInpt,
-                               FileInputStream SVdetectInput){
+    public void getInputValues(FileInputStream readDepthInput,
+                               FileInputStream SVdetectInput, String gender){
 
-        Scanner scanReadDepth = new Scanner(readDepthInpt);
+        Scanner scanReadDepth = new Scanner(readDepthInput);
         Scanner scanSVdetect = new Scanner(SVdetectInput);
-
 
         String[] lineScan;
         int index = 0;
@@ -74,8 +73,12 @@ public class newSegments extends Crunch {
         readDepth.sort(new cnvData.sortData());
         SVdetect.sort(new cnvData.sortData());
 
+        System.out.println("Crunching values...");
         crunch(readDepth, SVdetect, newSegments, newSegmentsXY);
+        System.out.println("Normalizing values...");
         normalize(newSegments);
+        System.out.println("Normalizing values for X and Y chromosomes...");
+//        normalizeXY(newSegmentsXY);
 
     }
 

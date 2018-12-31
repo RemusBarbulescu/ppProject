@@ -23,7 +23,9 @@ public class main {
         }
 
         newSegments ns = new newSegments();
-        ns.getInputValues(readDepthInput, SVdetectInput);
+        String gender = "male";
+        System.out.println("Reconstructing the segmentation...");
+        ns.getInputValues(readDepthInput, SVdetectInput, gender);
         System.out.println("Finnish");
 
     }

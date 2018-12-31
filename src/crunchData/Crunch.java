@@ -17,81 +17,81 @@ public class Crunch extends normalizeValues {
 
         int index = 0, indexXY = 0;
         // Inserting start & end values on one column
-        for (cnvData aReadDepth : readDepth) {
+        for (cnvData itr : readDepth) {
 
 
-            if (!aReadDepth.getChr().equals("Y")
-                    && !aReadDepth.getChr().equals("X")) {
+            if (!itr.getChr().equals("Y")
+                    && !itr.getChr().equals("X")) {
 
                 Buffer.add(new newSegmentFrame());
-                Buffer.get(index).setValues(aReadDepth.getChr(),
-                        aReadDepth.getStart(), 0,
-                        aReadDepth.getValue(), 0.0f);
+                Buffer.get(index).setValues(itr.getChr(),
+                        itr.getStart(), 0,
+                        itr.getValue(), 0.0f);
                 index++;
 
             } else {
                 BufferXY.add(new newSegmentFrame());
-                BufferXY.get(indexXY).setValues(aReadDepth.getChr(),
-                        aReadDepth.getStart(), 0,
-                        aReadDepth.getValue(), 0.0f);
+                BufferXY.get(indexXY).setValues(itr.getChr(),
+                        itr.getStart(), 0,
+                        itr.getValue(), 0.0f);
                 indexXY++;
             }
 
 
-            if (!aReadDepth.getChr().equals("Y")
-                    && !aReadDepth.getChr().equals("X")) {
+            if (!itr.getChr().equals("Y")
+                    && !itr.getChr().equals("X")) {
 
                 Buffer.add(new newSegmentFrame());
-                Buffer.get(index).setValues(aReadDepth.getChr(),
-                        aReadDepth.getEnd(), 0,
-                        aReadDepth.getValue(), 0.0f);
+                Buffer.get(index).setValues(itr.getChr(),
+                        itr.getEnd(), 0,
+                        itr.getValue(), 0.0f);
                 index++;
 
             } else {
                 BufferXY.add(new newSegmentFrame());
-                BufferXY.get(indexXY).setValues(aReadDepth.getChr(),
-                        aReadDepth.getEnd(), 0,
-                        aReadDepth.getValue(), 0.0f);
+                BufferXY.get(indexXY).setValues(itr.getChr(),
+                        itr.getEnd(), 0,
+                        itr.getValue(), 0.0f);
                 indexXY++;
             }
 
         }
 
         // Same, but now for SVdetect values
-        for (cnvData aSVdetect : SVdetect) {
+        for (cnvData itr : SVdetect) {
 
-            if (!aSVdetect.getChr().equals("Y")
-                    && !aSVdetect.getChr().equals("X")) {
+            if (!itr.getChr().equals("Y")
+                    && !itr.getChr().equals("X")) {
 
                 Buffer.add(new newSegmentFrame());
-                Buffer.get(index).setValues(aSVdetect.getChr(),
-                        aSVdetect.getStart(), 0,
-                        0.0f, aSVdetect.getValue());
+                Buffer.get(index).setValues(itr.getChr(),
+                        itr.getStart(), 0,
+                        0.0f, itr.getValue());
                 index++;
 
             } else {
                 BufferXY.add(new newSegmentFrame());
-                BufferXY.get(indexXY).setValues(aSVdetect.getChr(),
-                        aSVdetect.getStart(), 0,
-                        0.0f, aSVdetect.getValue());
+                BufferXY.get(indexXY).setValues(itr.getChr(),
+                        itr.getStart(), 0,
+                        0.0f, itr.getValue());
                 indexXY++;
             }
 
 
-            if (!aSVdetect.getChr().equals("Y")
-                    && !aSVdetect.getChr().equals("X")) {
+            if (!itr.getChr().equals("Y")
+                    && !itr.getChr().equals("X")) {
 
                 Buffer.add(new newSegmentFrame());
-                Buffer.get(index).setValues(aSVdetect.getChr(),
-                        aSVdetect.getEnd(), 0,
-                        0.0f, aSVdetect.getValue());
+                Buffer.get(index).setValues(itr.getChr(),
+                        itr.getEnd(), 0,
+                        0.0f, itr.getValue());
                 index++;
 
             } else {
                 BufferXY.add(new newSegmentFrame());
-                BufferXY.get(indexXY).setValues(aSVdetect.getChr(),
-                        aSVdetect.getEnd(), 0,
-                        0.0f, aSVdetect.getValue());
+                BufferXY.get(indexXY).setValues(itr.getChr(),
+                        itr.getEnd(), 0,
+                        0.0f, itr.getValue());
                 indexXY++;
             }
 
@@ -188,9 +188,9 @@ public class Crunch extends normalizeValues {
                     } else {
 
                         if (who.equals("rd"))
-                            buffer.setReadDepthValue(0.0f);
+                            buffer.setReadDepthValue(0.0);
                         else
-                            buffer.setSVdetectValue(0.0f);
+                            buffer.setSVdetectValue(0.0);
                         break;
 
                     }

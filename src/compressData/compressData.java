@@ -2,6 +2,7 @@ package compressData;
 
 import DataFrames.cnvFrame;
 import DataFrames.compressFrame;
+import MatchToReferenceGenome.matchToRefGenome;
 
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;
@@ -9,7 +10,7 @@ import java.math.RoundingMode;
 import java.util.Formatter;
 import java.util.List;
 
-public class compressData {
+public class compressData extends matchToRefGenome {
 
     protected void compress(List<cnvFrame> cnvCombined){
 
@@ -18,14 +19,17 @@ public class compressData {
                 "", "", "");
         Formatter out = null;
         try {
-            out = new Formatter("../MetaCNV/Output Files/test.txt");
+
+            if (!cnvCombined.get(0).getChr().equals("X") && !cnvCombined.get(0).getChr().equals("Y")) {
+                out = new Formatter("../MetaCNV/Output Files/test.txt");
+            }else {
+                out = new Formatter("../MetaCNV/Output Files/testXY.txt");
+            }
+            out.format("%s\t%s\t%s\t%s\t%s\t%s\t%s",
+                    "chr", "start", "end", "CN", "RD.CN", "SV.CN", "Comments");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-
-        assert out != null;
-        out.format("%s\t%s\t%s\t%s\t%s\t%s\t%s\n",
-                "chr", "start", "end", "CN", "RD.CN", "SV.CN", "Comments");
 
         for (cnvFrame itr : cnvCombined) {
 
@@ -66,7 +70,7 @@ public class compressData {
                 }else {
 
 
-                    out.format("%s\t%s\t%s\t%s\t%s\t%s\t%s\n", buffer.getChr(), buffer.getStart(),
+                    out.format("\n%s\t%s\t%s\t%s\t%s\t%s\t%s", buffer.getChr(), buffer.getStart(),
                             buffer.getEnd(), buffer.getValue(), buffer.getReadDepthValue(),
                             buffer.getSVdetectValue(), buffer.getComment());
 
@@ -77,5 +81,7 @@ public class compressData {
             }
         }
         out.close();
+//        System.out.println("Matching to the reference genome...");
+//        matchCNVtoRefGenome("../MetaCNV/Output Files/test.txt");
     }
 }
