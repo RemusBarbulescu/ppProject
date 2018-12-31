@@ -10,34 +10,55 @@ import java.util.*;
 
 public class combineValues extends compressData{
 
-    private Map<Double, Integer> frequency = new HashMap<>();
-    private List<cnvFrame> cnvCombined = new ArrayList<>();
-    //private boolean found = false;
-
     protected void combine(List<newSegmentFrame> newSegments) {
 
+        Map<Double, Integer> frequency = new HashMap<>();
+        List<cnvFrame> cnvCombined = new ArrayList<>();
+        //private boolean found = false;
+
         for (newSegmentFrame itr : newSegments){
-            this.frequency.merge(itr.getReadDepthValue(), 1, Integer::sum);
+            frequency.merge(itr.getReadDepthValue(), 1, Integer::sum);
         }
 
         int localMinimum = Integer.MAX_VALUE;
         double amplificationThreshold = 0;
         double deletionsThreshold;
+        double ploidity;
+        if (!newSegments.get(0).getChr().equals("X") && !newSegments.get(0).getChr().equals("Y")) {
 
-        for (Object o : frequency.entrySet()){
+            ploidity = 2.0;
 
-            Map.Entry pair = (Map.Entry) o;
+            for (Object o : frequency.entrySet()){
 
-            if ((double)pair.getKey() >= 2.0 && (double)pair.getKey() <= 2.35){
-                if ((int)pair.getValue() < localMinimum){
-                    localMinimum = (int)pair.getValue();
-                    amplificationThreshold = (double)pair.getKey();
+                Map.Entry pair = (Map.Entry) o;
+
+                if ((double)pair.getKey() >= 2.0 && (double)pair.getKey() <= 2.35){
+                    if ((int)pair.getValue() < localMinimum){
+                        localMinimum = (int)pair.getValue();
+                        amplificationThreshold = (double)pair.getKey();
+                    }
                 }
             }
+
+            deletionsThreshold = ploidity - (amplificationThreshold - ploidity);
+
+        }else {
+            ploidity = 1.0;
+            for (Object o : frequency.entrySet()){
+
+                Map.Entry pair = (Map.Entry) o;
+
+                if ((double)pair.getKey() >= 1.0 && (double)pair.getKey() <= 1.35){
+                    if ((int)pair.getValue() < localMinimum){
+                        localMinimum = (int)pair.getValue();
+                        amplificationThreshold = (double)pair.getKey();
+                    }
+                }
+            }
+
+            deletionsThreshold = ploidity - (amplificationThreshold - ploidity);
         }
 
-
-        deletionsThreshold = 2 - (amplificationThreshold - 2);
         int index = 0;
 
         for (newSegmentFrame itr : newSegments){
@@ -74,7 +95,7 @@ public class combineValues extends compressData{
 
                             cnvCombined.add(new cnvFrame());
                             cnvCombined.get(index).setValues(itr.getChr(), itr.getStart(), itr.getEnd(),
-                                    2.0, itr.getReadDepthValue(), itr.getSVdetectValue(),
+                                    ploidity, itr.getReadDepthValue(), itr.getSVdetectValue(),
                                     "Conflict1 (RD:AMP, SV:DEL)");
                             index++;
 
@@ -84,7 +105,7 @@ public class combineValues extends compressData{
 
                                 cnvCombined.add(new cnvFrame());
                                 cnvCombined.get(index).setValues(itr.getChr(), itr.getStart(), itr.getEnd(),
-                                        2.0, itr.getReadDepthValue(), itr.getSVdetectValue(),
+                                        ploidity, itr.getReadDepthValue(), itr.getSVdetectValue(),
                                         "Conflict2 (RD:DEL, SV:AMP)");
                                 index++;
 
@@ -131,7 +152,7 @@ public class combineValues extends compressData{
 
                             cnvCombined.add(new cnvFrame());
                             cnvCombined.get(index).setValues(itr.getChr(), itr.getStart(), itr.getEnd(),
-                                    2.0, itr.getReadDepthValue(), itr.getSVdetectValue(),
+                                    ploidity, itr.getReadDepthValue(), itr.getSVdetectValue(),
                                     "Unknown Error");
                             index++;
 
@@ -142,7 +163,7 @@ public class combineValues extends compressData{
             }
         }
 
-        for (int i = 1; i < cnvCombined.size(); i++){
+        for (int i = 1; i < cnvCombined.size()-1; i++){
 
             if (cnvCombined.get(i).getComment().equals("Conflict1 (RD:AMP, SV:DEL)") &&
                     ((cnvCombined.get(i-1).getComment().equals("RD") && cnvCombined.get(i+1).getComment().equals("RD")) ||
@@ -155,6 +176,7 @@ public class combineValues extends compressData{
 
         }
 
+        System.out.println("Compressing final values...");
         compress(cnvCombined);
 
     }
