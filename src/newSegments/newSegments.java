@@ -74,11 +74,13 @@ public class newSegments extends Crunch {
         SVdetect.sort(new cnvData.sortData());
 
         System.out.println("Crunching values...");
-        crunch(readDepth, SVdetect, newSegments, newSegmentsXY);
+        crunch(readDepth, SVdetect, newSegments, newSegmentsXY, gender);
         System.out.println("Normalizing values...");
         normalize(newSegments);
-        System.out.println("Normalizing values for X and Y chromosomes...");
-//        normalizeXY(newSegmentsXY);
+        if (gender.equals("male")) {
+            System.out.println("Normalizing values for X and Y chromosomes...");
+            normalizeXY(newSegmentsXY);
+        }
 
     }
 
