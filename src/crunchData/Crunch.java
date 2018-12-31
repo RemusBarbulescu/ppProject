@@ -13,15 +13,15 @@ public class Crunch extends normalizeValues {
 
 
     protected void crunch(List<cnvData> readDepth, List<cnvData> SVdetect,
-                          List<newSegmentFrame> newSegments, List<newSegmentFrame> newSegmentsXY){
+                          List<newSegmentFrame> newSegments, List<newSegmentFrame> newSegmentsXY, String gender){
 
         int index = 0, indexXY = 0;
         // Inserting start & end values on one column
         for (cnvData itr : readDepth) {
 
 
-            if (!itr.getChr().equals("Y")
-                    && !itr.getChr().equals("X")) {
+            if ((!itr.getChr().equals("Y")
+                    && !itr.getChr().equals("X")) || gender.equals("female")) {
 
                 Buffer.add(new newSegmentFrame());
                 Buffer.get(index).setValues(itr.getChr(),
@@ -38,8 +38,8 @@ public class Crunch extends normalizeValues {
             }
 
 
-            if (!itr.getChr().equals("Y")
-                    && !itr.getChr().equals("X")) {
+            if ((!itr.getChr().equals("Y")
+                    && !itr.getChr().equals("X")) || gender.equals("female")) {
 
                 Buffer.add(new newSegmentFrame());
                 Buffer.get(index).setValues(itr.getChr(),
@@ -60,8 +60,8 @@ public class Crunch extends normalizeValues {
         // Same, but now for SVdetect values
         for (cnvData itr : SVdetect) {
 
-            if (!itr.getChr().equals("Y")
-                    && !itr.getChr().equals("X")) {
+            if ((!itr.getChr().equals("Y")
+                    && !itr.getChr().equals("X")) || gender.equals("female")) {
 
                 Buffer.add(new newSegmentFrame());
                 Buffer.get(index).setValues(itr.getChr(),
@@ -78,8 +78,8 @@ public class Crunch extends normalizeValues {
             }
 
 
-            if (!itr.getChr().equals("Y")
-                    && !itr.getChr().equals("X")) {
+            if ((!itr.getChr().equals("Y")
+                    && !itr.getChr().equals("X")) || gender.equals("female")) {
 
                 Buffer.add(new newSegmentFrame());
                 Buffer.get(index).setValues(itr.getChr(),
@@ -99,8 +99,7 @@ public class Crunch extends normalizeValues {
 
         // Sorting data
         Buffer.sort(new newSegmentFrame.sortData());
-        BufferXY.sort(new newSegmentFrame.sortData());
-
+        if (gender.equals("male")) { BufferXY.sort(new newSegmentFrame.sortData()); }
 
         newSegmentFrame buffer = new newSegmentFrame();
         int j = 0, k = 0;
@@ -128,29 +127,31 @@ public class Crunch extends normalizeValues {
             }
         }
 
-        j = 0;
-        k = 0;
-        index = 0;
-        for (int i = 0; i < BufferXY.size()-1; i++){
+        if (gender.equals("male")) {
+            j = 0;
+            k = 0;
+            index = 0;
+            for (int i = 0; i < BufferXY.size() - 1; i++) {
 
-            if (BufferXY.get(i).getChr().equals(BufferXY.get(i+1).getChr())){
+                if (BufferXY.get(i).getChr().equals(BufferXY.get(i + 1).getChr())) {
 
-                if (BufferXY.get(i+1).getStart() - BufferXY.get(i).getStart() > 1){
+                    if (BufferXY.get(i + 1).getStart() - BufferXY.get(i).getStart() > 1) {
 
-                    buffer.setChr(BufferXY.get(i).getChr());
-                    buffer.setStart(BufferXY.get(i).getStart());
-                    buffer.setEnd(BufferXY.get(i+1).getStart());
+                        buffer.setChr(BufferXY.get(i).getChr());
+                        buffer.setStart(BufferXY.get(i).getStart());
+                        buffer.setEnd(BufferXY.get(i + 1).getStart());
 
-                    j = assignCNV(j, buffer, readDepth, "rd");
-                    k = assignCNV(k ,buffer, SVdetect, "sv");
+                        j = assignCNV(j, buffer, readDepth, "rd");
+                        k = assignCNV(k, buffer, SVdetect, "sv");
 
 
-                    newSegmentsXY.add(new newSegmentFrame());
-                    newSegmentsXY.get(index).setValues(buffer.getChr(), buffer.getStart(),
-                            buffer.getEnd(), buffer.getReadDepthValue(),
-                            buffer.getSVdetectValue());
-                    index++;
+                        newSegmentsXY.add(new newSegmentFrame());
+                        newSegmentsXY.get(index).setValues(buffer.getChr(), buffer.getStart(),
+                                buffer.getEnd(), buffer.getReadDepthValue(),
+                                buffer.getSVdetectValue());
+                        index++;
 
+                    }
                 }
             }
         }
