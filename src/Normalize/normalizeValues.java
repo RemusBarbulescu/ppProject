@@ -10,7 +10,7 @@ import java.math.RoundingMode;
 import java.util.*;
 
 @SuppressWarnings("ALL")
-public class normalizeValues extends combineValues {
+public abstract class normalizeValues extends combineValues {
 
     private Map<Double, Integer> frequency;
     private int localMaximum;
@@ -94,8 +94,10 @@ public class normalizeValues extends combineValues {
         for (newSegmentFrame itr : values) {
 
             //normalizing SVdetect values in the process
-            double eFactor = Math.pow(1 + (itr.getSVdetectValue() / 100.0), 0.75 * itr.getSVdetectValue());
-            BigDecimal bd = new BigDecimal(eFactor * itr.getSVdetectValue());
+            svNorm eFactor = (value) -> Math.pow(1 + (value / 100.0), 0.75 * value);
+            BigDecimal bd = new BigDecimal(
+                    eFactor.compute(itr.getSVdetectValue()) * itr.getSVdetectValue()
+            );
             bd = bd.setScale(4, RoundingMode.HALF_UP);
             itr.setSVdetectValue((bd.doubleValue()));
 
@@ -103,6 +105,14 @@ public class normalizeValues extends combineValues {
 
         }
 
+    }
+
+    interface svNorm{
+        double compute (double value);
+    }
+
+    interface rdNorm{
+        double compute (double value);
     }
 
     private void getMostFrequentValue(){
@@ -124,8 +134,9 @@ public class normalizeValues extends combineValues {
 
         for (newSegmentFrame itr : values) {
 
-            double factor = Math.min(itr.getReadDepthValue() / 2.0, 1.0);
-            itr.setReadDepthValue(itr.getReadDepthValue() + (factor * bias));
+            rdNorm factor = (value) -> Math.min(value / 2.0, 1.0);
+            itr.setReadDepthValue(itr.getReadDepthValue() +
+                    (factor.compute(itr.getReadDepthValue()) * bias));
 
         }
 

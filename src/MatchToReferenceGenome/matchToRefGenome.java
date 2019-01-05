@@ -6,14 +6,9 @@ import DataFrames.genesFrame;
 import javax.swing.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.LineNumberReader;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Formatter;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class matchToRefGenome {
 
@@ -21,8 +16,8 @@ public class matchToRefGenome {
     protected void matchCNVtoRefGenome(String cnvInputPath, String outputName,
                                        FileInputStream refGenomeInput, JProgressBar progressBar, String gender) {
 
-        List<List<genesFrame>> genes = new ArrayList<>(24);
-//        int[] index = new int[24];
+        Map<Integer, Map<Integer, genesFrame>> genes = new HashMap<>(24);
+
 
         List<cnvData> cnv = new ArrayList<>();
 
@@ -49,14 +44,6 @@ public class matchToRefGenome {
         Scanner cnvScanner = new Scanner(cnvInput);
         Scanner geneScanner = new Scanner(refGenomeInput);
 
-        LineNumberReader lines = null;
-        try {
-            lines = new LineNumberReader(new FileReader(cnvInputPath));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        System.out.println(lines.getLineNumber());
-        System.exit(1);
         String[] lineScan;
         int cnvIndex = 0;
 
@@ -69,9 +56,8 @@ public class matchToRefGenome {
         }
 
         for (int i = 0; i < 24; i++) {
-            genes.add(new ArrayList<>());
+            genes.put(i, new HashMap<>());
         }
-
         while (cnvScanner.hasNextLine()) {
 
             lineScan = cnvScanner.nextLine().split("\t");
@@ -87,6 +73,7 @@ public class matchToRefGenome {
             }
         }
 
+        int[] index = new int[24];
         int check = 0;
         while (geneScanner.hasNextLine()) {
 
@@ -100,243 +87,171 @@ public class matchToRefGenome {
                 switch (lineScan[1]){
 
                     case "1":
-                        genes.get(0).add(new genesFrame(lineScan[1], lineScan[2], lineScan[3],
+                        genes.get(0).put(index[0], new genesFrame(lineScan[1], lineScan[2], lineScan[3],
                                 lineScan[5], lineScan[7], lineScan[11], Integer.parseInt(lineScan[12]),
                                 Integer.parseInt(lineScan[13])));
-//                        genes.get(0).get(index[0]).setValues(lineScan[1], lineScan[2], lineScan[3],
-//                                lineScan[5], lineScan[7], lineScan[11], Integer.parseInt(lineScan[12]),
-//                                Integer.parseInt(lineScan[13]));
-//                        index[0]++;
+                        index[0]++;
                         break;
 
                     case "2":
-                        genes.get(1).add(new genesFrame(lineScan[1], lineScan[2], lineScan[3],
+                        genes.get(1).put(index[1], new genesFrame(lineScan[1], lineScan[2], lineScan[3],
                                 lineScan[5], lineScan[7], lineScan[11], Integer.parseInt(lineScan[12]),
                                 Integer.parseInt(lineScan[13])));
-//                        genes.get(1).get(index[1]).setValues(lineScan[1], lineScan[2], lineScan[3],
-//                                lineScan[5], lineScan[7], lineScan[11], Integer.parseInt(lineScan[12]),
-//                                Integer.parseInt(lineScan[13]));
-//                        index[1]++;
+                        index[1]++;
                         break;
 
                     case "3":
-                        genes.get(2).add(new genesFrame(lineScan[1], lineScan[2], lineScan[3],
+                        genes.get(2).put(index[2], new genesFrame(lineScan[1], lineScan[2], lineScan[3],
                                 lineScan[5], lineScan[7], lineScan[11], Integer.parseInt(lineScan[12]),
                                 Integer.parseInt(lineScan[13])));
-//                        genes.get(2).get(index[2]).setValues(lineScan[1], lineScan[2], lineScan[3],
-//                                lineScan[5], lineScan[7], lineScan[11], Integer.parseInt(lineScan[12]),
-//                                Integer.parseInt(lineScan[13]));
-//                        index[2]++;
+                        index[2]++;
                         break;
 
                     case "4":
-                        genes.get(3).add(new genesFrame(lineScan[1], lineScan[2], lineScan[3],
+                        genes.get(3).put(index[3], new genesFrame(lineScan[1], lineScan[2], lineScan[3],
                                 lineScan[5], lineScan[7], lineScan[11], Integer.parseInt(lineScan[12]),
                                 Integer.parseInt(lineScan[13])));
-//                        genes.get(3).get(index[3]).setValues(lineScan[1], lineScan[2], lineScan[3],
-//                                lineScan[5], lineScan[7], lineScan[11], Integer.parseInt(lineScan[12]),
-//                                Integer.parseInt(lineScan[13]));
-//                        index[3]++;
+                        index[3]++;
                         break;
 
                     case "5":
-                        genes.get(4).add(new genesFrame(lineScan[1], lineScan[2], lineScan[3],
+                        genes.get(4).put(index[4], new genesFrame(lineScan[1], lineScan[2], lineScan[3],
                                 lineScan[5], lineScan[7], lineScan[11], Integer.parseInt(lineScan[12]),
                                 Integer.parseInt(lineScan[13])));
-//                        genes.get(4).get(index[4]).setValues(lineScan[1], lineScan[2], lineScan[3],
-//                                lineScan[5], lineScan[7], lineScan[11], Integer.parseInt(lineScan[12]),
-//                                Integer.parseInt(lineScan[13]));
-//                        index[4]++;
+                        index[4]++;
                         break;
 
                     case "6":
-                        genes.get(5).add(new genesFrame(lineScan[1], lineScan[2], lineScan[3],
+                        genes.get(5).put(index[5], new genesFrame(lineScan[1], lineScan[2], lineScan[3],
                                 lineScan[5], lineScan[7], lineScan[11], Integer.parseInt(lineScan[12]),
                                 Integer.parseInt(lineScan[13])));
-//                        genes.get(5).get(index[5]).setValues(lineScan[1], lineScan[2], lineScan[3],
-//                                lineScan[5], lineScan[7], lineScan[11], Integer.parseInt(lineScan[12]),
-//                                Integer.parseInt(lineScan[13]));
-//                        index[5]++;
+                        index[5]++;
                         break;
 
                     case "7":
-                        genes.get(6).add(new genesFrame(lineScan[1], lineScan[2], lineScan[3],
+                        genes.get(6).put(index[6], new genesFrame(lineScan[1], lineScan[2], lineScan[3],
                                 lineScan[5], lineScan[7], lineScan[11], Integer.parseInt(lineScan[12]),
                                 Integer.parseInt(lineScan[13])));
-//                        genes.get(6).get(index[6]).setValues(lineScan[1], lineScan[2], lineScan[3],
-//                                lineScan[5], lineScan[7], lineScan[11], Integer.parseInt(lineScan[12]),
-//                                Integer.parseInt(lineScan[13]));
-//                        index[6]++;
+                        index[6]++;
                         break;
 
                     case "8":
-                        genes.get(7).add(new genesFrame(lineScan[1], lineScan[2], lineScan[3],
+                        genes.get(7).put(index[7], new genesFrame(lineScan[1], lineScan[2], lineScan[3],
                                 lineScan[5], lineScan[7], lineScan[11], Integer.parseInt(lineScan[12]),
                                 Integer.parseInt(lineScan[13])));
-//                        genes.get(7).get(index[7]).setValues(lineScan[1], lineScan[2], lineScan[3],
-//                                lineScan[5], lineScan[7], lineScan[11], Integer.parseInt(lineScan[12]),
-//                                Integer.parseInt(lineScan[13]));
-//                        index[7]++;
+                        index[7]++;
                         break;
 
                     case "9":
-                        genes.get(8).add(new genesFrame(lineScan[1], lineScan[2], lineScan[3],
+                        genes.get(8).put(index[8], new genesFrame(lineScan[1], lineScan[2], lineScan[3],
                                 lineScan[5], lineScan[7], lineScan[11], Integer.parseInt(lineScan[12]),
                                 Integer.parseInt(lineScan[13])));
-//                        genes.get(8).get(index[8]).setValues(lineScan[1], lineScan[2], lineScan[3],
-//                                lineScan[5], lineScan[7], lineScan[11], Integer.parseInt(lineScan[12]),
-//                                Integer.parseInt(lineScan[13]));
-//                        index[8]++;
+                        index[8]++;
                         break;
 
                     case "10":
-                        genes.get(9).add(new genesFrame(lineScan[1], lineScan[2], lineScan[3],
+                        genes.get(9).put(index[9], new genesFrame(lineScan[1], lineScan[2], lineScan[3],
                                 lineScan[5], lineScan[7], lineScan[11], Integer.parseInt(lineScan[12]),
                                 Integer.parseInt(lineScan[13])));
-//                        genes.get(9).get(index[9]).setValues(lineScan[1], lineScan[2], lineScan[3],
-//                                lineScan[5], lineScan[7], lineScan[11], Integer.parseInt(lineScan[12]),
-//                                Integer.parseInt(lineScan[13]));
-//                        index[9]++;
+                        index[9]++;
                         break;
 
                     case "11":
-                        genes.get(10).add(new genesFrame(lineScan[1], lineScan[2], lineScan[3],
+                        genes.get(10).put(index[10], new genesFrame(lineScan[1], lineScan[2], lineScan[3],
                                 lineScan[5], lineScan[7], lineScan[11], Integer.parseInt(lineScan[12]),
                                 Integer.parseInt(lineScan[13])));
-//                        genes.get(10).get(index[10]).setValues(lineScan[1], lineScan[2], lineScan[3],
-//                                lineScan[5], lineScan[7], lineScan[11], Integer.parseInt(lineScan[12]),
-//                                Integer.parseInt(lineScan[13]));
-//                        index[10]++;
+                        index[10]++;
                         break;
 
                     case "12":
-                        genes.get(11).add(new genesFrame(lineScan[1], lineScan[2], lineScan[3],
+                        genes.get(11).put(index[11], new genesFrame(lineScan[1], lineScan[2], lineScan[3],
                                 lineScan[5], lineScan[7], lineScan[11], Integer.parseInt(lineScan[12]),
                                 Integer.parseInt(lineScan[13])));
-//                        genes.get(11).get(index[11]).setValues(lineScan[1], lineScan[2], lineScan[3],
-//                                lineScan[5], lineScan[7], lineScan[11], Integer.parseInt(lineScan[12]),
-//                                Integer.parseInt(lineScan[13]));
-//                        index[11]++;
+                        index[11]++;
                         break;
 
                     case "13":
-                        genes.get(12).add(new genesFrame(lineScan[1], lineScan[2], lineScan[3],
+                        genes.get(12).put(index[12], new genesFrame(lineScan[1], lineScan[2], lineScan[3],
                                 lineScan[5], lineScan[7], lineScan[11], Integer.parseInt(lineScan[12]),
                                 Integer.parseInt(lineScan[13])));
-//                        genes.get(12).get(index[12]).setValues(lineScan[1], lineScan[2], lineScan[3],
-//                                lineScan[5], lineScan[7], lineScan[11], Integer.parseInt(lineScan[12]),
-//                                Integer.parseInt(lineScan[13]));
-//                        index[12]++;
+                        index[12]++;
                         break;
 
                     case "14":
-                        genes.get(13).add(new genesFrame(lineScan[1], lineScan[2], lineScan[3],
+                        genes.get(13).put(index[13], new genesFrame(lineScan[1], lineScan[2], lineScan[3],
                                 lineScan[5], lineScan[7], lineScan[11], Integer.parseInt(lineScan[12]),
                                 Integer.parseInt(lineScan[13])));
-//                        genes.get(13).get(index[13]).setValues(lineScan[1], lineScan[2], lineScan[3],
-//                                lineScan[5], lineScan[7], lineScan[11], Integer.parseInt(lineScan[12]),
-//                                Integer.parseInt(lineScan[13]));
-//                        index[13]++;
+                        index[13]++;
                         break;
 
                     case "15":
-                        genes.get(14).add(new genesFrame(lineScan[1], lineScan[2], lineScan[3],
+                        genes.get(14).put(index[14], new genesFrame(lineScan[1], lineScan[2], lineScan[3],
                                 lineScan[5], lineScan[7], lineScan[11], Integer.parseInt(lineScan[12]),
                                 Integer.parseInt(lineScan[13])));
-//                        genes.get(14).get(index[14]).setValues(lineScan[1], lineScan[2], lineScan[3],
-//                                lineScan[5], lineScan[7], lineScan[11], Integer.parseInt(lineScan[12]),
-//                                Integer.parseInt(lineScan[13]));
-//                        index[14]++;
+                        index[14]++;
                         break;
 
                     case "16":
-                        genes.get(15).add(new genesFrame(lineScan[1], lineScan[2], lineScan[3],
+                        genes.get(15).put(index[15], new genesFrame(lineScan[1], lineScan[2], lineScan[3],
                                 lineScan[5], lineScan[7], lineScan[11], Integer.parseInt(lineScan[12]),
                                 Integer.parseInt(lineScan[13])));
-//                        genes.get(15).get(index[15]).setValues(lineScan[1], lineScan[2], lineScan[3],
-//                                lineScan[5], lineScan[7], lineScan[11], Integer.parseInt(lineScan[12]),
-//                                Integer.parseInt(lineScan[13]));
-//                        index[15]++;
+                        index[15]++;
                         break;
 
                     case "17":
-                        genes.get(16).add(new genesFrame(lineScan[1], lineScan[2], lineScan[3],
+                        genes.get(16).put(index[16], new genesFrame(lineScan[1], lineScan[2], lineScan[3],
                                 lineScan[5], lineScan[7], lineScan[11], Integer.parseInt(lineScan[12]),
                                 Integer.parseInt(lineScan[13])));
-//                        genes.get(16).get(index[16]).setValues(lineScan[1], lineScan[2], lineScan[3],
-//                                lineScan[5], lineScan[7], lineScan[11], Integer.parseInt(lineScan[12]),
-//                                Integer.parseInt(lineScan[13]));
-//                        index[16]++;
+                        index[16]++;
                         break;
 
                     case "18":
-                        genes.get(17).add(new genesFrame(lineScan[1], lineScan[2], lineScan[3],
+                        genes.get(17).put(index[17], new genesFrame(lineScan[1], lineScan[2], lineScan[3],
                                 lineScan[5], lineScan[7], lineScan[11], Integer.parseInt(lineScan[12]),
                                 Integer.parseInt(lineScan[13])));
-//                        genes.get(17).get(index[17]).setValues(lineScan[1], lineScan[2], lineScan[3],
-//                                lineScan[5], lineScan[7], lineScan[11], Integer.parseInt(lineScan[12]),
-//                                Integer.parseInt(lineScan[13]));
-//                        index[17]++;
+                        index[17]++;
                         break;
 
                     case "19":
-                        genes.get(18).add(new genesFrame(lineScan[1], lineScan[2], lineScan[3],
+                        genes.get(18).put(index[18], new genesFrame(lineScan[1], lineScan[2], lineScan[3],
                                 lineScan[5], lineScan[7], lineScan[11], Integer.parseInt(lineScan[12]),
                                 Integer.parseInt(lineScan[13])));
-//                        genes.get(18).get(index[18]).setValues(lineScan[1], lineScan[2], lineScan[3],
-//                                lineScan[5], lineScan[7], lineScan[11], Integer.parseInt(lineScan[12]),
-//                                Integer.parseInt(lineScan[13]));
-//                        index[18]++;
+                        index[18]++;
                         break;
 
                     case "20":
-                        genes.get(19).add(new genesFrame(lineScan[1], lineScan[2], lineScan[3],
+                        genes.get(19).put(index[19], new genesFrame(lineScan[1], lineScan[2], lineScan[3],
                                 lineScan[5], lineScan[7], lineScan[11], Integer.parseInt(lineScan[12]),
                                 Integer.parseInt(lineScan[13])));
-//                        genes.get(19).get(index[19]).setValues(lineScan[1], lineScan[2], lineScan[3],
-//                                lineScan[5], lineScan[7], lineScan[11], Integer.parseInt(lineScan[12]),
-//                                Integer.parseInt(lineScan[13]));
-//                        index[19]++;
+                        index[19]++;
                         break;
 
                     case "21":
-                        genes.get(20).add(new genesFrame(lineScan[1], lineScan[2], lineScan[3],
+                        genes.get(20).put(index[20], new genesFrame(lineScan[1], lineScan[2], lineScan[3],
                                 lineScan[5], lineScan[7], lineScan[11], Integer.parseInt(lineScan[12]),
                                 Integer.parseInt(lineScan[13])));
-//                        genes.get(20).get(index[20]).setValues(lineScan[1], lineScan[2], lineScan[3],
-//                                lineScan[5], lineScan[7], lineScan[11], Integer.parseInt(lineScan[12]),
-//                                Integer.parseInt(lineScan[13]));
-//                        index[20]++;
+                        index[20]++;
                         break;
 
                     case "22":
-                        genes.get(21).add(new genesFrame(lineScan[1], lineScan[2], lineScan[3],
+                        genes.get(21).put(index[21], new genesFrame(lineScan[1], lineScan[2], lineScan[3],
                                 lineScan[5], lineScan[7], lineScan[11], Integer.parseInt(lineScan[12]),
                                 Integer.parseInt(lineScan[13])));
-//                        genes.get(21).get(index[21]).setValues(lineScan[1], lineScan[2], lineScan[3],
-//                                lineScan[5], lineScan[7], lineScan[11], Integer.parseInt(lineScan[12]),
-//                                Integer.parseInt(lineScan[13]));
-//                        index[21]++;
+                        index[21]++;
                         break;
 
                     case "X":
-                        genes.get(22).add(new genesFrame(lineScan[1], lineScan[2], lineScan[3],
+                        genes.get(22).put(index[22], new genesFrame(lineScan[1], lineScan[2], lineScan[3],
                                 lineScan[5], lineScan[7], lineScan[11], Integer.parseInt(lineScan[12]),
                                 Integer.parseInt(lineScan[13])));
-//                        genes.get(22).get(index[22]).setValues(lineScan[1], lineScan[2], lineScan[3],
-//                                lineScan[5], lineScan[7], lineScan[11], Integer.parseInt(lineScan[12]),
-//                                Integer.parseInt(lineScan[13]));
-//                        index[22]++;
+                        index[22]++;
                         break;
 
                     case "Y":
-                        genes.get(23).add(new genesFrame(lineScan[1], lineScan[2], lineScan[3],
+                        genes.get(23).put(index[23], new genesFrame(lineScan[1], lineScan[2], lineScan[3],
                                 lineScan[5], lineScan[7], lineScan[11], Integer.parseInt(lineScan[12]),
                                 Integer.parseInt(lineScan[13])));
-//                        genes.get(23).get(index[23]).setValues(lineScan[1], lineScan[2], lineScan[3],
-//                                lineScan[5], lineScan[7], lineScan[11], Integer.parseInt(lineScan[12]),
-//                                Integer.parseInt(lineScan[13]));
-//                        index[23]++;
+                        index[23]++;
                         break;
 
                     default:
