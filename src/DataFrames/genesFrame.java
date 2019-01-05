@@ -11,9 +11,8 @@ public class genesFrame {
     private int start;
     private int end;
 
-    public void setValues(String chr, String geneId, String biotype, String name, String strand,
-                          String exonId, int start, int end){
-
+    public genesFrame(String chr, String geneId, String biotype, String name, String strand,
+               String exonId, int start, int end){
         this.chr = chr;
         this.geneId = geneId;
         this.biotype = biotype;
@@ -22,8 +21,21 @@ public class genesFrame {
         this.exonId = exonId;
         this.start = start;
         this.end = end;
-
     }
+
+//    public void setValues(String chr, String geneId, String biotype, String name, String strand,
+//                          String exonId, int start, int end){
+//
+//        this.chr = chr;
+//        this.geneId = geneId;
+//        this.biotype = biotype;
+//        this.name = name;
+//        this.strand = strand;
+//        this.exonId = exonId;
+//        this.start = start;
+//        this.end = end;
+//
+//    }
 
     public String getChr() { return chr; }
 

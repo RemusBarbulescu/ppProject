@@ -21,7 +21,7 @@ public class Crunch extends normalizeValues {
 
 
             if ((!itr.getChr().equals("Y")
-                    && !itr.getChr().equals("X")) || gender.equals("female")) {
+                    && !itr.getChr().equals("X")) || gender.equals("F")) {
 
                 Buffer.add(new newSegmentFrame());
                 Buffer.get(index).setValues(itr.getChr(),
@@ -39,7 +39,7 @@ public class Crunch extends normalizeValues {
 
 
             if ((!itr.getChr().equals("Y")
-                    && !itr.getChr().equals("X")) || gender.equals("female")) {
+                    && !itr.getChr().equals("X")) || gender.equals("F")) {
 
                 Buffer.add(new newSegmentFrame());
                 Buffer.get(index).setValues(itr.getChr(),
@@ -61,7 +61,7 @@ public class Crunch extends normalizeValues {
         for (cnvData itr : SVdetect) {
 
             if ((!itr.getChr().equals("Y")
-                    && !itr.getChr().equals("X")) || gender.equals("female")) {
+                    && !itr.getChr().equals("X")) || gender.equals("F")) {
 
                 Buffer.add(new newSegmentFrame());
                 Buffer.get(index).setValues(itr.getChr(),
@@ -79,7 +79,7 @@ public class Crunch extends normalizeValues {
 
 
             if ((!itr.getChr().equals("Y")
-                    && !itr.getChr().equals("X")) || gender.equals("female")) {
+                    && !itr.getChr().equals("X")) || gender.equals("F")) {
 
                 Buffer.add(new newSegmentFrame());
                 Buffer.get(index).setValues(itr.getChr(),
@@ -99,7 +99,7 @@ public class Crunch extends normalizeValues {
 
         // Sorting data
         Buffer.sort(new newSegmentFrame.sortData());
-        if (gender.equals("male")) { BufferXY.sort(new newSegmentFrame.sortData()); }
+        if (gender.equals("M")) { BufferXY.sort(new newSegmentFrame.sortData()); }
 
         newSegmentFrame buffer = new newSegmentFrame();
         int j = 0, k = 0;
@@ -127,7 +127,7 @@ public class Crunch extends normalizeValues {
             }
         }
 
-        if (gender.equals("male")) {
+        if (gender.equals("M")) {
             j = 0;
             k = 0;
             index = 0;

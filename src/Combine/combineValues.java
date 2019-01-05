@@ -4,17 +4,21 @@ import DataFrames.cnvFrame;
 import DataFrames.newSegmentFrame;
 import compressData.compressData;
 
+import javax.swing.*;
+import java.io.FileInputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
 
 public class combineValues extends compressData{
 
-    protected void combine(List<newSegmentFrame> newSegments) {
+    @SuppressWarnings("Duplicates")
+    protected void combine(List<newSegmentFrame> newSegments, FileInputStream refGenomeInput,
+                           String gender, String match, String outputName,
+                           JProgressBar progressBar, JTextArea console) {
 
         Map<Double, Integer> frequency = new HashMap<>();
         List<cnvFrame> cnvCombined = new ArrayList<>();
-        //private boolean found = false;
 
         for (newSegmentFrame itr : newSegments){
             frequency.merge(itr.getReadDepthValue(), 1, Integer::sum);
@@ -176,8 +180,45 @@ public class combineValues extends compressData{
 
         }
 
-        System.out.println("Compressing final values...");
-        compress(cnvCombined);
+        if (gender.equals("M")) {
+            if (!cnvCombined.get(0).getChr().equals("X") && !cnvCombined.get(0).getChr().equals("Y")) {
+                if (match.equals("Yes")) {
+                    progressBar.setString("0.6%");
+                    progressBar.update(progressBar.getGraphics());
+                } else {
+                    progressBar.setString("65%");
+                    progressBar.setValue(65);
+                    progressBar.update(progressBar.getGraphics());
+                }
+                console.append("Compressing final values for chromosomes 1-22...\n");
+                console.update(console.getGraphics());
+                compress(cnvCombined, refGenomeInput, gender, match, outputName, progressBar, console);
+            } else {
+                if (match.equals("Yes")) {
+                    progressBar.setString("90.6%");
+                    progressBar.update(progressBar.getGraphics());
+                } else {
+                    progressBar.setString("98%");
+                    progressBar.setValue(98);
+                    progressBar.update(progressBar.getGraphics());
+                }
+                console.append("Compressing final values for chromosomes X and Y...\n");
+                console.update(console.getGraphics());
+                compress(cnvCombined, refGenomeInput, gender, match, outputName, progressBar, console);
+            }
+        } else {
+            if (match.equals("Yes")) {
+                progressBar.setString("0.8%");
+                progressBar.update(progressBar.getGraphics());
+            } else {
+                progressBar.setString("75%");
+                progressBar.setValue(75);
+                progressBar.update(progressBar.getGraphics());
+            }
+            console.append("Compressing final values...\n");
+            console.update(console.getGraphics());
+            compress(cnvCombined, refGenomeInput, gender, match, outputName, progressBar, console);
+        }
 
     }
 
