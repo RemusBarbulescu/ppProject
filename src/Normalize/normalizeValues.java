@@ -3,10 +3,13 @@ package Normalize;
 import Combine.combineValues;
 import DataFrames.newSegmentFrame;
 
+import javax.swing.*;
+import java.io.FileInputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
 
+@SuppressWarnings("ALL")
 public class normalizeValues extends combineValues {
 
     private Map<Double, Integer> frequency;
@@ -14,7 +17,9 @@ public class normalizeValues extends combineValues {
     private double localMaximumValue;
 
 
-    protected void normalize(List<newSegmentFrame> newSegments){
+    protected void normalize(List<newSegmentFrame> newSegments, FileInputStream refGenomeInput,
+                             String gender, String match, String outputName,
+                            JProgressBar progressBar, JTextArea console){
 
         frequency = new HashMap<>();
         localMaximum = 0;
@@ -27,12 +32,37 @@ public class normalizeValues extends combineValues {
         short ploidity = 2;
         normalizeRDvalues(newSegments, ploidity);
 
-        System.out.println("Combining values...");
-        combine(newSegments);
+        if (gender.equals("M")) {
+            if (match.equals("Yes")) {
+                progressBar.setString("0.3%");
+                progressBar.update(progressBar.getGraphics());
+            } else {
+                progressBar.setString("40%");
+                progressBar.setValue(40);
+                progressBar.update(progressBar.getGraphics());
+            }
+            console.append("Combining values for chromosomes 1-22...\n");
+            console.update(console.getGraphics());
+            combine(newSegments, refGenomeInput, gender, match, outputName, progressBar, console);
+        } else {
+            if (match.equals("Yes")) {
+                progressBar.setString("0.5%");
+                progressBar.update(progressBar.getGraphics());
+            } else {
+                progressBar.setString("50%");
+                progressBar.setValue(50);
+                progressBar.update(progressBar.getGraphics());
+            }
+            console.append("Combining values...\n");
+            console.update(console.getGraphics());
+            combine(newSegments, refGenomeInput, gender, match, outputName, progressBar, console);
+        }
 
     }
 
-    protected void normalizeXY(List<newSegmentFrame> newSegmentsXY){
+    protected void normalizeXY(List<newSegmentFrame> newSegmentsXY, FileInputStream refGenomeInput,
+                               String gender, String match, String outputName,
+                               JProgressBar progressBar, JTextArea console){
 
         frequency = new HashMap<>();
         localMaximum = 0;
@@ -45,8 +75,17 @@ public class normalizeValues extends combineValues {
         short ploidity = 1;
         normalizeRDvalues(newSegmentsXY, ploidity);
 
-        System.out.println("Combining values for X and Y chromosomes...");
-        combine(newSegmentsXY);
+        if (match.equals("Yes")) {
+            progressBar.setString("90.4%");
+            progressBar.update(progressBar.getGraphics());
+        } else {
+            progressBar.setString("95%");
+            progressBar.setValue(95);
+            progressBar.update(progressBar.getGraphics());
+        }
+        console.append("Combining values for chromosomes X and Y ...\n");
+        console.update(console.getGraphics());
+        combine(newSegmentsXY, refGenomeInput, gender, match, outputName, progressBar, console);
 
     }
 

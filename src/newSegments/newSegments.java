@@ -1,8 +1,10 @@
 package newSegments;
 import DataFrames.cnvData;
 import DataFrames.newSegmentFrame;
+import UserInterface.TextAreaStyle;
 import crunchData.Crunch;
 
+import javax.swing.*;
 import java.io.FileInputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -18,8 +20,11 @@ public class newSegments extends Crunch {
     private List<cnvData> SVdetect = new ArrayList<>();
 
 
+    @SuppressWarnings("Duplicates")
     public void getInputValues(FileInputStream readDepthInput,
-                               FileInputStream SVdetectInput, String gender){
+                               FileInputStream SVdetectInput, FileInputStream refGenomeInput,
+                               String gender, String match, String outputName,
+                               JProgressBar progressBar, TextAreaStyle console){
 
         Scanner scanReadDepth = new Scanner(readDepthInput);
         Scanner scanSVdetect = new Scanner(SVdetectInput);
@@ -73,16 +78,55 @@ public class newSegments extends Crunch {
         readDepth.sort(new cnvData.sortData());
         SVdetect.sort(new cnvData.sortData());
 
-        System.out.println("Crunching values...");
+        if (match.equals("Yes")) {
+            progressBar.setString("0.1%");
+            progressBar.update(progressBar.getGraphics());
+        } else {
+            progressBar.setString("14.2%");
+            progressBar.setValue(14);
+            progressBar.update(progressBar.getGraphics());
+        }
+        console.append("\t-Crunching values...\n");
+        console.update(console.getGraphics());
         crunch(readDepth, SVdetect, newSegments, newSegmentsXY, gender);
-        System.out.println("Normalizing values...");
-        normalize(newSegments);
-        if (gender.equals("male")) {
-            System.out.println("Normalizing values for X and Y chromosomes...");
-            normalizeXY(newSegmentsXY);
+
+        if (gender.equals("M")) {
+            if (match.equals("Yes")) {
+                progressBar.setString("0.2%");
+                progressBar.update(progressBar.getGraphics());
+            } else {
+                progressBar.setString("26%");
+                progressBar.setValue(26);
+                progressBar.update(progressBar.getGraphics());
+            }
+            console.append("Normalizing values for chromosomes 1-22...\n");
+            console.update(console.getGraphics());
+            normalize(newSegments, refGenomeInput, gender, match, outputName, progressBar, console);
+
+            if (match.equals("Yes")) {
+                progressBar.setString("90.1%");
+                progressBar.update(progressBar.getGraphics());
+            } else {
+                progressBar.setString("91%");
+                progressBar.setValue(91);
+                progressBar.update(progressBar.getGraphics());
+            }
+            console.append("Normalizing values for chromosomes X and Y...\n");
+            console.update(console.getGraphics());
+            normalizeXY(newSegmentsXY, refGenomeInput, gender, match, outputName, progressBar, console);
+        } else {
+            if (match.equals("Yes")) {
+                progressBar.setString("0.3%");
+                progressBar.update(progressBar.getGraphics());
+            } else {
+                progressBar.setString("35%");
+                progressBar.setValue(35);
+                progressBar.update(progressBar.getGraphics());
+            }
+            console.append("Normalizing values...\n");
+            console.update(console.getGraphics());
+            normalize(newSegments, refGenomeInput, gender, match, outputName, progressBar, console);
         }
 
     }
-
-
 }
