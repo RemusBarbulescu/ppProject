@@ -6,11 +6,15 @@ import crunchData.Crunch;
 
 import javax.swing.*;
 import java.io.FileInputStream;
+import java.lang.Integer;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
+import org.jpl7.*;
 import java.util.Scanner;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class newSegments extends Crunch {
 
@@ -31,6 +35,33 @@ public class newSegments extends Crunch {
 
         String[] lineScan;
         int index = 0;
+
+        Query q1 =
+                new Query(
+                        "consult",
+                        new Term[] {new Atom("../MetaCNV/src/checkInputFiles.pl")}
+                );
+        Term[] headers = new Term[]{new Atom("chr"), new Atom("cnv.start"), new Atom("cnv.end"),
+                new Atom("cnv")
+        };
+        if (q1.hasSolution()) {
+
+            String[] fileHeaders = scanReadDepth.nextLine().split("\t");
+            Term[] termFileHeaders = new Term[]{new Atom(fileHeaders[0]), new Atom(fileHeaders[1]), new Atom(fileHeaders[2]),
+                new Atom(fileHeaders[4])
+            };
+
+            Query q2 =
+                    new Query(
+                            "same",
+                            new Term[]{Util.termArrayToList(headers), Util.termArrayToList(termFileHeaders)}
+                    );
+
+            if(!q2.hasSolution()) {
+                System.out.println("Input file is corrupted.");
+                System.exit(1);
+            }
+        }
 
         while (scanReadDepth.hasNextLine()){
 
